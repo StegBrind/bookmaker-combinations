@@ -4,16 +4,23 @@ require 'vendor/autoload.php';
 require 'autoload.php';
 
 use App\Instances\Coefficient;
+use App\Instances\WebScraping\TableScraping;
 
 $budget = 1000;
 
 Coefficient::init();
+
+Coefficient::setRequiredCoefficients(['P1', 'X', 'P2', 'F1', 'F2', 'TB', 'TM', 'Both_Goal_Y', 'Both_Goal_N']);
+
+TableScraping::start('https://www.parimatch.com/sport/futbol/germanija-bundesliga', 1330);
+
 Coefficient::computeItems();
 
-Coefficient::setRequiredCoefficients(['F1', 'F2', 'TM', 'TB']);
-
-$coef_keys = array_keys(Coefficient::$items);
+var_dump(Coefficient::$items);
 
 \App\Output\Coefficient::outputCombinations(
-    Coefficient::$items, $coef_keys, $budget, 1
+    Coefficient::$items,
+    array_keys(Coefficient::$items),
+    $budget,
+    4
 );

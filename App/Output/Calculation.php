@@ -26,8 +26,11 @@ class Calculation
 
         $logic_combs_count = 0;
         $pluses_possibs = [];
+        $plus_results = 0;
         $zeros_possibs = [];
+        $zero_results = 0;
         $minus_possibs = [];
+        $minus_results = 0;
 
         $incomes = [];
         $combs = [];
@@ -43,7 +46,10 @@ class Calculation
             }
 
             $match_result = null;
-            if (($match_result = self::possibleResults($mask, $coef_arr)) === false) continue;
+            if (($match_result = self::possibleResults($mask, $coef_arr)) === false)
+                continue;
+
+
             $match_results[] = $match_result;
 
             $results = self::resultsAmount($mask);
@@ -54,9 +60,18 @@ class Calculation
 
             $income = self::calculateIncome($mask, $coef_arr, $budget);
 
-            if ($income > 0)       $pluses_possibs[] = $possibility;
-            else if ($income == 0) $zeros_possibs[] = $possibility;
-            else                   $minus_possibs[] = $possibility;
+            if ($income > 0) {
+                $plus_results += sizeof($match_result);
+                $pluses_possibs[] = $possibility;
+            }
+            else if ($income == 0) {
+                $zero_results += sizeof($match_result);
+                $zeros_possibs[] = $possibility;
+            }
+            else {
+                $minus_results += sizeof($match_result);
+                $minus_possibs[] = $possibility;
+            }
 
             $incomes[] = $income;
             $combs[] = $mask;
@@ -77,6 +92,8 @@ class Calculation
             echo PHP_EOL;
         }
 
+        // calculating percent of incomes
+
         $plus_gen = sizeof($pluses_possibs) == 0 ? 0
             : array_sum($pluses_possibs) / sizeof($pluses_possibs);
 
@@ -86,14 +103,24 @@ class Calculation
         $minus_gen = sizeof($minus_possibs) == 0 ? 0
             : array_sum($minus_possibs) / sizeof($minus_possibs);
 
-        $g = $plus_gen + $zero_gen + $minus_gen;
+        $g1 = $plus_gen + $zero_gen + $minus_gen;
 
-        $plus_gen = $plus_gen == 0 ? 0 : 100 / ($g / $plus_gen);
-        $zero_gen = $zero_gen == 0 ? 0 : 100 / ($g / $zero_gen);
+        $plus_gen = $plus_gen == 0 ? 0 : 100 / ($g1 / $plus_gen);
+        $zero_gen = $zero_gen == 0 ? 0 : 100 / ($g1 / $zero_gen);
         $minus_gen = 100 - ($plus_gen + $zero_gen);
 
+        // calculating percentage coverage of favorable and adverse results
+
+        $g2 = $plus_results + $zero_results + $minus_results;
+
+        $plus_results = $plus_results == 0 ? 0 : 100 / ($g2 / $plus_results);
+        $zero_results = $zero_results == 0 ? 0 : 100 / ($g2 / $zero_results);
+        $minus_results = 100 - ($plus_results + $zero_results);
 
         echo
+            'Процент охвата исходов в плюс: ' . $plus_results . ' %' . PHP_EOL .
+            'Процент охвата исходов в ноль: ' . $zero_results . ' %' . PHP_EOL .
+            'Процент охвата исходов в минус: ' . $minus_results . ' %' . PHP_EOL .
             'Процент уйти в плюс: ' . $plus_gen . ' %' . PHP_EOL .
             'Процент уйти в ноль: ' . $zero_gen . ' %' . PHP_EOL .
             'Процент уйти в минус: ' . $minus_gen . ' %' . PHP_EOL .
