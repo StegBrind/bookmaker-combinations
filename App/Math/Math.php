@@ -37,4 +37,14 @@ class Math
 
         return sqrt(2 * M_PI) * pow($t, $x + 0.5) * exp(-$t) * $a;
     }
+
+    static function percent_of_value($value, $percent)
+    {
+        return $percent / 100 * $value;
+    }
+
+    static function value_of_value($v1, $v2)
+    {
+        return $v1 / $v2 * 100;
+    }
 }

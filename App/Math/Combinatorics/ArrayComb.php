@@ -4,6 +4,8 @@ namespace App\Math\Combinatorics;
 
 class ArrayComb
 {
+    static $percents = [];
+
     static function getAllPossibleCombinations($items, $size, $combinations = [])
     {
         if (empty($combinations)) {

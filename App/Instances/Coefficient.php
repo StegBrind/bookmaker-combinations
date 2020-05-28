@@ -32,7 +32,7 @@ class Coefficient
                     'zero' => 1 / 3
                 ],
                 'extra' => 0,
-                'coef' => 1.86,
+                'coef' => 1.59,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -79,9 +79,10 @@ class Coefficient
             ],
             'T_2-3' => [
                 'possibilities' => [
-                    'win' => 1 / 3
+                    'win' => 1 / 3,
+                    'zero' => 0
                 ],
-                'coef' => 2.1,
+                'coef' => 2.04,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -94,9 +95,10 @@ class Coefficient
             ],
             'T_0-1' => [
                 'possibilities' => [
-                    'win' => 1 / 3
+                    'win' => 1 / 3,
+                    'zero' => 0
                 ],
-                'coef' => 2.95,
+                'coef' => 3.6,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -109,9 +111,10 @@ class Coefficient
             ],
             'T_4-more' => [
                 'possibilities' => [
-                    'win' => 1 / 3
+                    'win' => 1 / 2,
+                    'zero' => 0
                 ],
-                'coef' => 3.85,
+                'coef' => 3.2,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -122,73 +125,169 @@ class Coefficient
                             return !(($second_team + $first_team) >= 4);
                     }
             ],
-            'Team1_1-2_Y' => [
+            'T_odd' => [
                 'possibilities' => [
-                    'win' => 1 / 3,
+                    'win' => 1 / 2,
                     'zero' => 0
                 ],
-                'coef' => 1.66,
+                'coef' => 1.94,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
-                            return $first_team == 1 || $first_team == 2;
+                            return ($second_team + $first_team) % 2 != 0;
                         else if ($result_match == 'Z')
                             return false;
                         else
-                            return !($first_team == 1 || $first_team == 2);
+                            return ($second_team + $first_team) % 2 == 0;
                     }
             ],
-            'Team1_1-2_N' => [
+            'T_even' => [
                 'possibilities' => [
-                    'win' => 1 / 3,
+                    'win' => 1 / 2,
                     'zero' => 0
                 ],
-                'coef' => 2.15,
+                'coef' => 1.92,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
-                            return $first_team != 1 && $first_team != 2;
+                            return ($second_team + $first_team) % 2 == 0;
                         else if ($result_match == 'Z')
                             return false;
                         else
-                            return !($first_team != 1 && $first_team != 2);
+                            return ($second_team + $first_team) % 2 != 0;
                     }
             ],
-            'Team2_1-2_Y' => [
+            'Team1_win_in_1-2_goals' => [
                 'possibilities' => [
-                    'win' => 1 / 3,
+                    'win' => 13 / 64,
                     'zero' => 0
                 ],
-                'coef' => 1.61,
+                'coef' => 2.25,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
-                            return $second_team == 1 || $second_team == 2;
+                            return ($first_team - $second_team) == 1 || ($first_team - $second_team) == 2;
                         else if ($result_match == 'Z')
                             return false;
                         else
-                            return !($second_team == 1 || $second_team == 2);
+                            return !(($first_team - $second_team) == 1 || ($first_team - $second_team) == 2);
                     }
             ],
-            'Team2_1-2_N' => [
+            'Team2_win_in_1-2_goals' => [
                 'possibilities' => [
-                    'win' => 1 / 3,
+                    'win' => 13 / 64,
+                    'zero' => 0
+                ],
+                'coef' => 3.9,
+                'rule' =>
+                    function ($result_match, $first_team, $second_team, $coef_arr) {
+                        if ($result_match == 'W')
+                            return ($second_team - $first_team) == 1 || ($second_team - $first_team) == 2;
+                        else if ($result_match == 'Z')
+                            return false;
+                        else
+                            return !(($second_team - $first_team) == 1 || ($second_team - $first_team) == 2);
+                    }
+            ],
+            'Team1_win_in_1_goal_or_draw' => [
+                'possibilities' => [
+                    'win' => 15 / 64,
+                    'zero' => 0
+                ],
+                'coef' => 2.55,
+                'rule' =>
+                    function ($result_match, $first_team, $second_team, $coef_arr) {
+                        if ($result_match == 'W')
+                            return ($first_team - $second_team) == 1 || $first_team == $second_team;
+                        else if ($result_match == 'Z')
+                            return false;
+                        else
+                            return !(($first_team - $second_team) == 1 || $first_team == $second_team);
+                    }
+            ],
+            'Team2_win_in_1_goal_or_draw' => [
+                'possibilities' => [
+                    'win' => 15 / 64,
                     'zero' => 0
                 ],
                 'coef' => 2.23,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
-                            return $second_team != 1 && $second_team != 2;
+                            return ($second_team - $first_team) == 1 || $first_team == $second_team;
                         else if ($result_match == 'Z')
                             return false;
                         else
-                            return !($second_team != 1 && $second_team != 2);
+                            return !(($second_team - $first_team) == 1 || $first_team == $second_team);
                     }
             ],
+//            'Team1_1-2_Y' => [
+//                'possibilities' => [
+//                    'win' => 1 / 3,
+//                    'zero' => 0
+//                ],
+//                'coef' => 1.66,
+//                'rule' =>
+//                    function ($result_match, $first_team, $second_team, $coef_arr) {
+//                        if ($result_match == 'W')
+//                            return $first_team == 1 || $first_team == 2;
+//                        else if ($result_match == 'Z')
+//                            return false;
+//                        else
+//                            return !($first_team == 1 || $first_team == 2);
+//                    }
+//            ],
+//            'Team1_1-2_N' => [
+//                'possibilities' => [
+//                    'win' => 1 / 3,
+//                    'zero' => 0
+//                ],
+//                'coef' => 2.15,
+//                'rule' =>
+//                    function ($result_match, $first_team, $second_team, $coef_arr) {
+//                        if ($result_match == 'W')
+//                            return $first_team != 1 && $first_team != 2;
+//                        else if ($result_match == 'Z')
+//                            return false;
+//                        else
+//                            return !($first_team != 1 && $first_team != 2);
+//                    }
+//            ],
+//            'Team2_1-2_Y' => [
+//                'possibilities' => [
+//                    'win' => 1 / 3,
+//                    'zero' => 0
+//                ],
+//                'coef' => 1.61,
+//                'rule' =>
+//                    function ($result_match, $first_team, $second_team, $coef_arr) {
+//                        if ($result_match == 'W')
+//                            return $second_team == 1 || $second_team == 2;
+//                        else if ($result_match == 'Z')
+//                            return false;
+//                        else
+//                            return !($second_team == 1 || $second_team == 2);
+//                    }
+//            ],
+//            'Team2_1-2_N' => [
+//                'possibilities' => [
+//                    'win' => 1 / 3,
+//                    'zero' => 0
+//                ],
+//                'coef' => 2.23,
+//                'rule' =>
+//                    function ($result_match, $first_team, $second_team, $coef_arr) {
+//                        if ($result_match == 'W')
+//                            return $second_team != 1 && $second_team != 2;
+//                        else if ($result_match == 'Z')
+//                            return false;
+//                        else
+//                            return !($second_team != 1 && $second_team != 2);
+//                    }
+//            ],
             'Both_Goal_Y' => [
                 'possibilities' => [
-                    'win' => 1 / 4,
+                    'win' => 49 / 64,
                     'zero' => 0
                 ],
                 'coef' => 1.86,
@@ -204,7 +303,7 @@ class Coefficient
             ],
             'Both_Goal_N' => [
                 'possibilities' => [
-                    'win' => 1 / 4,
+                    'win' => 15 / 64,
                     'zero' => 0
                 ],
                 'coef' => 1.88,
@@ -223,7 +322,7 @@ class Coefficient
                     'win' => 1 / 3,
                     'zero' => 0
                 ],
-                'coef' => 2.75,
+                'coef' => 3.4,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -239,7 +338,7 @@ class Coefficient
                     'win' => 1 / 3,
                     'zero' => 0
                 ],
-                'coef' => 3.25,
+                'coef' => 3.45,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -255,7 +354,7 @@ class Coefficient
                     'win' => 1 / 3,
                     'zero' => 0
                 ],
-                'coef' => 2.65,
+                'coef' => 2.21,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -303,7 +402,7 @@ class Coefficient
                     'win' => 2 / 3,
                     'zero' => 0
                 ],
-                'coef' => 1.45,
+                'coef' => 1.33,
                 'rule' =>
                     function ($result_match, $first_team, $second_team, $coef_arr) {
                         if ($result_match == 'W')
@@ -398,6 +497,7 @@ class Coefficient
                 if (($coef_val['extra'] - floor($coef_val['extra'])) != 0)
                 {
                     $coef_val['possibilities']['zero'] = 0;
+                    $coef_val['possibilities']['win'] = 1 / 2;
                 }
             }
         }
