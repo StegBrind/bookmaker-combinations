@@ -16,7 +16,8 @@ class ParsingRules
         self::$rules = [
             'F1' => function () {
                 $extra = TableScraping::$table1[3]->firstChild->textContent;
-                $extra = !is_numeric($extra[0]) && $extra[0] != '+' ? -floatval(substr($extra, 1)) : floatval($extra);
+                $extra = !is_numeric($extra[0]) && $extra[0] != '+' ? -floatval(substr($extra, 2)) : floatval($extra);
+
 
                 Coefficient::$items['F1']['extra'] = $extra;
                 Coefficient::$items['F1']['coef'] = floatval(TableScraping::$table1[4]->firstChild->textContent);
@@ -30,7 +31,7 @@ class ParsingRules
             },
             'TB' => function () {
                 $extra = TableScraping::$table1[5]->textContent;
-                $extra = $extra[0] == '–' ? -floatval(substr($extra, 1)) : floatval($extra);
+                $extra = !is_numeric($extra[0]) && $extra[0] != '+' ? -floatval(substr($extra, 2)) : floatval($extra);
 
                 Coefficient::$items['TB']['extra'] = $extra;
                 Coefficient::$items['TB']['coef'] = floatval(TableScraping::$table1[6]->textContent);
